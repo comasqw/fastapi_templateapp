@@ -1,0 +1,1 @@
+recursive-include fastapi_templateapp/templates *.html

@@ -2,10 +2,10 @@ from setuptools import setup, find_packages
 
 setup(
     name='fastapi_templateapp',
-    version='0.1.0',
+    version='0.1.1',
     author='Sevbii',
     description='Library for ease of working with templates',
-    url='https://github.com/yourusername/my_package',
+    url='https://github.com/comasqw/fastapi_templateapp',
     packages=find_packages(),
     classifiers=[
         'Programming Language :: Python :: 3',
@@ -16,4 +16,8 @@ setup(
     install_requires=[
         'fastapi',
     ],
+    package_data={
+        'fastapi_templateapp': ['templates/**/*.html'],
+    },
+    include_package_data=True,
 )
