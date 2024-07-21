@@ -27,11 +27,13 @@ def validate_template_response(template_response: dict):
 class TemplateApp(FastAPI):
 
     def __init__(self):
-        from .exceptions import http_exception_handler, request_validation_exception_handler
+        from .exceptions import TemplateAppExceptions
+
+        self.exceptions = TemplateAppExceptions()
 
         exception_handlers = {
-            HTTPException: http_exception_handler,
-            RequestValidationError: request_validation_exception_handler
+            HTTPException: self.exceptions.http_exception_handler,
+            RequestValidationError: self.exceptions.request_validation_exception_handler
         }
 
         super().__init__(docs_url=None,
@@ -39,3 +41,5 @@ class TemplateApp(FastAPI):
                          default_response_class=HTMLResponse,
                          exception_handlers=exception_handlers)
 
+    def update_errors_templates(self, new_errors_templates: dict):
+        self.exceptions.update_errors_templates(new_errors_templates)
