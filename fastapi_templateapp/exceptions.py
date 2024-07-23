@@ -65,15 +65,15 @@ class TemplateAppExceptions:
         form_endpoint = request_query_params.get("form_endpoint")
         if form_endpoint:
             redirect_query_params = {"errors": exc.errors(), "data": request_query_params}
-            redirect_with_validation_errors(form_endpoint, redirect_query_params)
+            return redirect_with_validation_errors(form_endpoint, redirect_query_params)
 
     @staticmethod
     async def handle_validation_error_post_request(request, exc) -> RedirectResponse | HTMLResponse:
         request_headers = request.headers
         request_content_type = request_headers.get("content-type")
-        request_refer_endpoint = request_headers.get("referer")
+        request_referer_endpoint = request_headers.get("referer")
 
-        if request_refer_endpoint:
+        if request_referer_endpoint:
             data = {}
             if request_content_type in ["application/x-www-form-urlencoded", "multipart/form-data"]:
                 data = dict(await request.form())
@@ -81,7 +81,7 @@ class TemplateAppExceptions:
                 data = await request.json()
 
             redirect_query_params = {"errors": exc.errors(), "data": data}
-            return redirect_with_validation_errors(request_refer_endpoint, redirect_query_params, status_code=303)
+            return redirect_with_validation_errors(request_referer_endpoint, redirect_query_params, status_code=303)
 
     async def request_validation_exception_handler(self, request: Request,
                                                    exc: RequestValidationError) -> RedirectResponse | HTMLResponse:
