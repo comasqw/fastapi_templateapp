@@ -6,12 +6,12 @@ from datetime import datetime, timedelta
 
 
 class ServerSideCSRFSecure:
-    def __init__(self, token_lifetime_seconds=900, tokens_lifetime_check_interval=30):
+    def __init__(self, token_lifetime_seconds=900, tokens_lifetime_check_interval=1800):
         self.tokens = {}
         self.token_lifetime = timedelta(seconds=token_lifetime_seconds)
 
         scheduler = BackgroundScheduler()
-        scheduler.add_job(self.clean_up_tokens, IntervalTrigger(minutes=tokens_lifetime_check_interval))
+        scheduler.add_job(self.clean_up_tokens, IntervalTrigger(seconds=tokens_lifetime_check_interval))
         scheduler.start()
 
     def generate_token(self, request: Request):
@@ -40,7 +40,7 @@ class ServerSideCSRFSecure:
         expired_ips = []
 
         for ip, data in self.tokens.items():
-            if now - data["token_generate_time"] > self.token_lifetime:
+            if now - data["token_generate_time"] < self.token_lifetime:
                 expired_ips.append(ip)
 
         for ip in expired_ips:
