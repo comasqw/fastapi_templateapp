@@ -15,7 +15,8 @@ setup(
     python_requires='>=3.6',
     install_requires=[
         'fastapi',
-        'apscheduler'
+        'apscheduler',
+        'httpx'
     ],
     package_data={
         'fastapi_templateapp': ['templates/**/*.html'],
