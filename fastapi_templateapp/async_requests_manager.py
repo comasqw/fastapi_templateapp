@@ -2,7 +2,7 @@ import httpx
 from starlette.exceptions import HTTPException
 
 
-class RequestsMethods:
+class HTTPMethods:
     GET = "get"
     POST = "post"
 
@@ -14,9 +14,9 @@ class AsyncRequestsManager:
     async def _send_request(self, url: str, method: str, data: dict | None = None) -> httpx.Response:
         try:
             async with httpx.AsyncClient() as client:
-                if method == "get":
+                if method == HTTPMethods.GET:
                     response = await client.get(url, params=data)
-                elif method == "post":
+                elif method == HTTPMethods.POST:
                     response = await client.post(url, json=data)
                 else:
                     raise ValueError("Invalid request method")
